@@ -5,8 +5,8 @@
 
 
 # LOADING LIBS ------------------------------------------------------------
-install.packages("tidyverse")
-library("dplyr")
+install.packages("tidyverse", "janitor")
+library("dplyr", "janitor")
 
 # LOADING DATA ------------------------------------------------------------
 exp_22123112 <- jsonlite::fromJSON("https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/")
@@ -45,3 +45,11 @@ isa <- 8 # assigning values
 # TIDYVERSE COMMANDS ------------------------------------------------------
 
 exp_22123112 %>% glimpse() %>% View()
+
+
+# 27 SEP 2023 -------------------------------------------------------------
+
+str(exp_22123112) # get data type
+df <- exp_22123112$ListaEESSPrecio # get readable data
+glimpse(df)
+df %>% janitor::clean_names() %>% glimpse()
