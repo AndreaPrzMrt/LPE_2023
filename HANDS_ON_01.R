@@ -7,6 +7,8 @@
 # LOADING LIBS ------------------------------------------------------------
 install.packages("tidyverse", "janitor")
 library("dplyr", "janitor")
+library(dplyr)
+library(janitor)
 
 # LOADING DATA ------------------------------------------------------------
 exp_22123112 <- jsonlite::fromJSON("https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/")
@@ -53,3 +55,11 @@ str(exp_22123112) # get data type
 df <- exp_22123112$ListaEESSPrecio # get readable data
 glimpse(df)
 df %>% janitor::clean_names() %>% glimpse()
+
+
+# WORKING W PIPES (OPT. MODE) ---------------------------------------------
+
+clean_data <- df %>% janitor::clean_names() %>% glimpse()
+
+clean_data_2 <- df %>% readr::type_convert(locale = readr::locale(decimal_mark=",")) %>% clean_names() %>% as_tibble()
+clean_data_2 %>% glimpse()
