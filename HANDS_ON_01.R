@@ -61,5 +61,16 @@ df %>% janitor::clean_names() %>% glimpse()
 
 clean_data <- df %>% janitor::clean_names() %>% glimpse()
 
-clean_data_2 <- df %>% readr::type_convert(locale = readr::locale(decimal_mark=",")) %>% clean_names() %>% as_tibble()
+clean_data_2 <- df %>% readr::type_convert(locale = readr::locale(decimal_mark=",")) %>% clean_names()
 clean_data_2 %>% glimpse()
+
+
+# DEALING W DATA ----------------------------------------------------------
+
+villa_boa_gas <- clean_data_2 %>% select(precio_gasoleo_a, rotulo, direccion, localidad) %>% 
+  filter(localidad=="VILLAVICIOSA DE ODON" | localidad== "BOADILLA DEL MONTE") %>% 
+  arrange(precio_gasoleo_a) %>% View()
+
+
+
+
