@@ -5,10 +5,11 @@
 
 
 # LOADING LIBS ------------------------------------------------------------
-install.packages("tidyverse", "janitor")
-library("dplyr", "janitor")
-library(dplyr)
+install.packages("tidyverse", "janitor", "readr")
+install.packages("leaflet")
+library(tidyverse)
 library(janitor)
+library(leaflet)
 
 # LOADING DATA ------------------------------------------------------------
 exp_22123112 <- jsonlite::fromJSON("https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/")
@@ -72,5 +73,8 @@ villa_boa_gas <- clean_data_2 %>% select(precio_gasoleo_a, rotulo, direccion, lo
   arrange(precio_gasoleo_a) %>% View()
 
 
+# STORING DATA ------------------------------------------------------------
+
+write_excel_csv2(villa_boa_gas, "informe_madrid.xlsx")
 
 
