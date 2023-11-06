@@ -115,3 +115,10 @@ copied_df$`comunidad_autonoma`[copied_df$idccaa == "07"] <- "Castilla-La Mancha"
 copied_df$`comunidad_autonoma`[copied_df$idccaa == "08"] <- "Castilla y León"
 
 copied_df %>% View()
+
+
+# JOIN POB ----------------------------------------------------------------
+
+pobmun22 <- read_excel("pobmun22.xlsx", skip = 1) %>% as_tibble() %>% select(NOMBRE,POB22)
+result_data <- copied_df %>% 
+  inner_join(pobmun22, by = c("municipio" = "NOMBRE")) %>% View()
