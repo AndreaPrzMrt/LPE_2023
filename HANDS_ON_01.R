@@ -62,7 +62,7 @@ df %>% janitor::clean_names() %>% glimpse()
 
 clean_data <- df %>% janitor::clean_names() %>% glimpse()
 
-clean_data_2 <- df %>% readr::type_convert(locale = readr::locale(decimal_mark=",")) %>% clean_names()
+clean_data_2 <- df %>% readr::type_convert(locale = readr::locale(decimal_mark=",")) %>% clean_names() %>% as_tibble()
 clean_data_2 %>% glimpse()
 
 
@@ -78,3 +78,21 @@ villa_boa_gas <- clean_data_2 %>% select(precio_gasoleo_a, rotulo, direccion, lo
 write_excel_csv2(villa_boa_gas, "informe_madrid.xlsx")
 
 
+# WORKING W REPORTS -------------------------------------------------------
+
+gas_mad_1_55 <- clean_data_2 %>% select(precio_gasoleo_a, rotulo, direccion, localidad, provincia, latitud, longitud_wgs84) %>% 
+  filter(provincia == "MADRID" & precio_gasoleo_a<1.55) %>% arrange(desc(precio_gasoleo_a))
+
+gas_mad_1_55 %>% leaflet() %>% addTiles() %>% addCircleMarkers(lat = ~latitud, lng = ~longitud_wgs84, popup=~rotulo, label=~precio_gasoleo_a)
+
+# CLASE 18 OCT ------------------------------------------------------------
+
+gas_mad_ballenoil <- clean_data_2 %>% select(precio_gasoleo_a, rotulo, direccion, localidad, provincia) %>% 
+  filter(provincia == "MADRID" & rotulo == "BALLENOIL") %>% arrange(precio_gasoleo_a) %>% View()
+
+gas_mad_mean_rotulo <- clean_data_2 %>% group_by(rotulo) %>% summarise(mean(precio_gasoleo_a)) %>% View()
+
+
+# DEALING W COLS ----------------------------------------------------------
+
+clean_data_2 %>% mutate(low_cost = !rotulo %in% c("REPSOL","CEPSA","Q8","BP","SHELL","CAMPSA","GALP")) %>% View()
