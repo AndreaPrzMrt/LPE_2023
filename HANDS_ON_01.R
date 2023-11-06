@@ -10,6 +10,8 @@ install.packages("leaflet")
 library(tidyverse)
 library(janitor)
 library(leaflet)
+library(readr)
+library(readxl)
 
 # LOADING DATA ------------------------------------------------------------
 exp_22123112 <- jsonlite::fromJSON("https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/")
@@ -96,3 +98,20 @@ gas_mad_mean_rotulo <- clean_data_2 %>% group_by(rotulo) %>% summarise(mean(prec
 # DEALING W COLS ----------------------------------------------------------
 
 clean_data_2 %>% mutate(low_cost = !rotulo %in% c("REPSOL","CEPSA","Q8","BP","SHELL","CAMPSA","GALP")) %>% View()
+
+
+# JOIN CCAA ---------------------------------------------------------------
+
+ccaa <- read_excel("codccaa_OFFCIAL.xls", skip=1)
+merged_df <- clean_data_2 %>% 
+  left_join(ccaa, by = c("idccaa" = "CODIGO")) %>% 
+  rename("comunidad_autonoma" = LITERAL) %>% view()
+
+# cambiar 07 por 08
+
+copied_df <- merged_df
+
+copied_df$`comunidad_autonoma`[copied_df$idccaa == "07"] <- "Castilla-La Mancha"
+copied_df$`comunidad_autonoma`[copied_df$idccaa == "08"] <- "Castilla y León"
+
+copied_df %>% View()
